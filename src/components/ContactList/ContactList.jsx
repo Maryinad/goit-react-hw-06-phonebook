@@ -1,32 +1,22 @@
 import { ContactItem } from './ContactItem';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-export function ContactList({ contacts, onDeleteBtn }) {
+export function ContactList() {
+  const contacts = useSelector(state => state.phonebook.contacts);
+  const value = useSelector(state => state.phonebook.filter);
+
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().trim().includes(value.toLowerCase())
+  );
   return (
     <ul>
-      {contacts.length > 0 &&
-        contacts.map(({ id, name, number }) => (
+      {filteredContacts.length > 0 &&
+        filteredContacts.map(({ id, name, number }) => (
           <>
-            <ContactItem
-              id={id}
-              key={id}
-              name={name}
-              number={number}
-              onDeleteBtn={onDeleteBtn}
-            />
+            <ContactItem id={id} key={id} name={name} number={number} />
             {/* <button onClick={() => onDeleteBtn(id)}>Delete</button> */}
           </>
         ))}
     </ul>
   );
 }
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.number.isRequired,
-    })
-  ),
-};

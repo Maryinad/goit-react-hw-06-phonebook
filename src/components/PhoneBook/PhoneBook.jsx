@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   FormField,
   TitleName,
@@ -8,8 +7,15 @@ import {
   InputNumber,
   Btn,
 } from './PhoneBook.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { addContactsAction } from 'redux/phoneBook/phoneReducer';
 
-export function PhoneBook({ onAddContact }) {
+export function PhoneBook() {
+  const dispatch = useDispatch();
+
+  const contacts = useSelector(state => state.phonebook.contacts);
+
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -27,19 +33,23 @@ export function PhoneBook({ onAddContact }) {
       default:
         break;
     }
-    // const { name, value } = event.target; //делаем деструкторизацию
-    // if (name === 'name') {
-    //   setName(value);
-    // } else {
-    //   setNumber(value);
-    // }
-    // this.setState({ [name]: value.trim() }); //обчисливаемые св-ва объекта, после нажатия на input, определяет name какой и подставляет, н-р name="price", то будет price: (то, что ввели, те наше value)
   };
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    onAddContact({ name, number });
+    if (contacts.some(contact => contact.name === name)) {
+      alert(`Contact ${name} is already exist`);
+      return;
+    }
+    const contact = {
+      name,
+      number,
+      id: nanoid(),
+    };
+
+    dispatch(addContactsAction(contact));
+
     reset();
   };
 
@@ -77,7 +87,3 @@ export function PhoneBook({ onAddContact }) {
     </>
   );
 }
-
-PhoneBook.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
-};

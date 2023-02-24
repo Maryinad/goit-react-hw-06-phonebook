@@ -1,8 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Title, InputBlock } from './Filter.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilterAction } from 'redux/phoneBook/phoneReducer';
 
-export function Filter({ value, onFilterChange }) {
+export function Filter() {
+  const dispatch = useDispatch();
+  const value = useSelector(state => state.phonebook.filter);
+
+  const onFilterChange = event => {
+    dispatch(setFilterAction(event.target.value));
+  };
+
   return (
     <>
       <Title>Find contact by name</Title>
@@ -15,8 +23,3 @@ export function Filter({ value, onFilterChange }) {
     </>
   );
 }
-
-Filter.propTypes = {
-  value: PropTypes.string.isRequired,
-  onFilterChange: PropTypes.func.isRequired,
-};
