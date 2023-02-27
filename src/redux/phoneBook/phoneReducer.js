@@ -10,7 +10,7 @@ const phonebookSlice = createSlice({
   name: 'phonebook',
   // Начальное состояние редюсера слайса
   initialState: initialState,
-  // Объект редюсеров
+  // Объект редюсеров.
   reducers: {
     addContactsAction(state, action) {
       state.contacts = [...state.contacts, action.payload];
