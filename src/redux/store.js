@@ -1,6 +1,3 @@
-import { combineReducers } from '@reduxjs/toolkit';
-import { phoneReducer } from './phoneBook/phoneReducer';
-
 import { configureStore } from '@reduxjs/toolkit';
 // import { rootReducer } from './rootReducer';
 import {
@@ -14,6 +11,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { rootReducer } from './rootReducer';
 
 const contactsReducerConfig = {
   key: 'data',
@@ -21,12 +19,12 @@ const contactsReducerConfig = {
   blacklist: ['filter'],
 };
 
-export const rootReducer = combineReducers({
-  phonebook: persistReducer(contactsReducerConfig, phoneReducer),
-});
+// export const rootReducer = combineReducers({
+//   phonebook: persistReducer(contactsReducerConfig, phoneReducer),
+// });
 
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistReducer(contactsReducerConfig, rootReducer),
 
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
